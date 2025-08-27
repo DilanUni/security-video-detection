@@ -8,10 +8,10 @@ MAX_FPS: Final[int] = 15
 
 if __name__ == "__main__":
     sources: list = [
-        #0,1,2,
-        "videos/a.mp4",
-        "videos/video.mp4",
-        "videos/video.mp4"
+        0,1,2,
+        #"videos/a.mp4",
+        # "videos/video.mp4",
+        #"videos/video.mp4"
     ]
 
     manager: VideoManager = VideoManager(sources=sources, max_fps=MAX_FPS)

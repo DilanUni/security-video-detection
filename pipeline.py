@@ -26,7 +26,7 @@ class Pipeline:
                 if self.detector:
                     frame = self.detector.annotate(frame)
 
-                frames_out[source.name] = frame  # ← corregido
+                frames_out[source.name] = frame
 
             if frames_out:
                 if self.grid:
@@ -48,7 +48,8 @@ class Pipeline:
         if not frames:
             return
 
-        h, w = 240, 320
+        # h, w = 240, 320
+        h, w = 400, 400
         resized = [cv.resize(f, (w, h)) for f in frames.values()]
         cols = 2
         rows = (len(resized) + cols - 1) // cols
