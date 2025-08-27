@@ -1,15 +1,14 @@
-import cv2
+import cv2 as cv
 import numpy as np
-from typing import Optional
 from camera.VideoManager import VideoManager
 from detector.detector import Detector
 
 
 class Pipeline:
-    def __init__(self, manager: VideoManager, detector: Optional[Detector] = None, grid: bool = False) -> None:
-        self.manager = manager
-        self.detector = detector
-        self.grid = grid
+    def __init__(self, manager: VideoManager, detector: Detector, grid: bool = False) -> None:
+        self.manager: VideoManager = manager
+        self.detector: Detector = detector
+        self.grid: bool = grid
 
     def run(self) -> None:
         print("[Controls] q: quit")
@@ -19,7 +18,7 @@ class Pipeline:
             any_frame = False
 
             for i, source in enumerate(self.manager.sources):
-                frame = self.manager.get_frame(i)
+                frame: np.ndarray = self.manager.get_frame(i)
                 if frame is None:
                     continue
 
@@ -34,23 +33,23 @@ class Pipeline:
                     self._show_grid(frames_out)
                 else:
                     for name, frame in frames_out.items():
-                        cv2.imshow(name, frame)
+                        cv.imshow(name, frame)
 
-            key = cv2.waitKey(1) & 0xFF
+            key = cv.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
             if not any_frame:
                 break
 
         self.manager.stop_all()
-        cv2.destroyAllWindows()
+        cv.destroyAllWindows()
 
     def _show_grid(self, frames: dict) -> None:
         if not frames:
             return
 
         h, w = 240, 320
-        resized = [cv2.resize(f, (w, h)) for f in frames.values()]
+        resized = [cv.resize(f, (w, h)) for f in frames.values()]
         cols = 2
         rows = (len(resized) + cols - 1) // cols
 
@@ -59,4 +58,4 @@ class Pipeline:
 
         row_imgs = [np.hstack(resized[i * cols:(i + 1) * cols]) for i in range(rows)]
         grid = np.vstack(row_imgs)
-        cv2.imshow("Grid", grid)
+        cv.imshow("Grid", grid)

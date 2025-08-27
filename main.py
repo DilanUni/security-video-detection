@@ -1,20 +1,22 @@
 from camera.VideoManager import VideoManager
 from detector.detector import Detector
 from pipeline import Pipeline
+from typing import Final
 
-MODEL: str = "models/yolo11n.pt"
-MAX_FPS: int = 15
+MODEL: Final[str] = "models/yolo11n.pt"
+MAX_FPS: Final[int] = 15
 
 if __name__ == "__main__":
     sources: list = [
-        0,
+        #0,1,2,
         "videos/a.mp4",
+        "videos/video.mp4",
         "videos/video.mp4"
     ]
 
     manager: VideoManager = VideoManager(sources=sources, max_fps=MAX_FPS)
     detector: Detector = Detector(model_path=MODEL)
-    pipeline: Pipeline = Pipeline(manager, detector)
+    pipeline: Pipeline = Pipeline(manager, detector,grid=True)
 
     manager.start_cameras()
     pipeline.run()
