@@ -1,22 +1,41 @@
-from camera.VideoManager import VideoManager
-from detector.detector import Detector
+from utils.VideoSourceHelper import VideoSourceHelper
+from utils.VideoManager import VideoManager
+from detector.Detector import Detector
 from pipeline import Pipeline
 from typing import Final
 
-MODEL: Final[str] = "models/yolo11n.pt"
+MODEL_PATH: Final[str] = "models/yolo11n.pt"
 MAX_FPS: Final[int] = 15
+VIDEO_FOLDER: Final[str] = "videos"
+
+def main() -> None:
+    # 1 Get all available video sources (cameras + video files)
+    sources = VideoSourceHelper.get_all_sources(VIDEO_FOLDER)
+    print(f"Sources found: {sources}")
+
+    if not sources:
+        print("[FATAL] No video sources found.")
+        return
+
+    # 2 Initialize VideoManager with sources
+    manager = VideoManager(sources=sources, max_fps=MAX_FPS)
+
+    # 3 Start cameras / videos
+    manager.start_cameras()
+
+    # 4 Initialize detector and pipeline
+    detector = Detector(model_path=MODEL_PATH)
+    pipeline = Pipeline(manager, detector, grid=True)
+
+    # 5 Run the pipeline
+    try:
+        pipeline.run()
+    except KeyboardInterrupt:
+        print("\n[INFO] Pipeline interrupted by user.")
+    finally:
+        # 6 Stop all sources
+        manager.stop_all()
+        print("[INFO] All video sources stopped.")
 
 if __name__ == "__main__":
-    sources: list = [
-        0,1,2,
-        #"videos/a.mp4",
-        # "videos/video.mp4",
-        #"videos/video.mp4"
-    ]
-
-    manager: VideoManager = VideoManager(sources=sources, max_fps=MAX_FPS)
-    detector: Detector = Detector(model_path=MODEL)
-    pipeline: Pipeline = Pipeline(manager, detector,grid=True)
-
-    manager.start_cameras()
-    pipeline.run()
+    main()

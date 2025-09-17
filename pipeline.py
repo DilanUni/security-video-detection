@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
-from camera.VideoManager import VideoManager
-from detector.detector import Detector
+from utils.VideoManager import VideoManager
+from detector.Detector import Detector
 
 
 class Pipeline:
@@ -49,7 +49,7 @@ class Pipeline:
             return
 
         # h, w = 240, 320
-        h, w = 400, 400
+        h, w = 600, 600
         resized = [cv.resize(f, (w, h)) for f in frames.values()]
         cols = 2
         rows = (len(resized) + cols - 1) // cols

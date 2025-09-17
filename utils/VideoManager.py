@@ -1,6 +1,6 @@
 import cv2
 from typing import List, Union
-from camera.VideoSource import VideoSource
+from utils.VideoSource import VideoSource
 
 
 class VideoManager:
