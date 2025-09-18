@@ -4,8 +4,7 @@ from detector.Detector import Detector
 from pipeline import Pipeline
 from typing import Final
 
-MODEL_PATH: Final[str] = "models/yolo11n.pt"
-MAX_FPS: Final[int] = 15
+# MODEL_PATH: Final[str] = "models/yolo11n.pt"
 VIDEO_FOLDER: Final[str] = "videos"
 
 def main() -> None:
@@ -18,14 +17,15 @@ def main() -> None:
         return
 
     # 2 Initialize VideoManager with sources
-    manager = VideoManager(sources=sources, max_fps=MAX_FPS)
+    videoManager: VideoManager = VideoManager(sources=sources)
 
     # 3 Start cameras / videos
-    manager.start_cameras()
+    videoManager.start_cameras()
 
     # 4 Initialize detector and pipeline
-    detector = Detector(model_path=MODEL_PATH)
-    pipeline = Pipeline(manager, detector, grid=True)
+    #detector = Detector(model_path=MODEL_PATH)
+    detector: Detector = Detector()
+    pipeline: Pipeline = Pipeline(manager=videoManager, detector=detector, grid=True)
 
     # 5 Run the pipeline
     try:
@@ -34,7 +34,7 @@ def main() -> None:
         print("\n[INFO] Pipeline interrupted by user.")
     finally:
         # 6 Stop all sources
-        manager.stop_all()
+        videoManager.stop_all()
         print("[INFO] All video sources stopped.")
 
 if __name__ == "__main__":

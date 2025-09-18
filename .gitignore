@@ -87,3 +87,7 @@ docs/
 docs/*
 # External binaries
 ffmpeg.exe
+
+# Image files
+*.png
+*.jpg

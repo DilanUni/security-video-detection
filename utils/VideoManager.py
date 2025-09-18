@@ -4,13 +4,12 @@ from utils.VideoSource import VideoSource
 
 
 class VideoManager:
-    def __init__(self, sources: List[Union[int, str]], max_fps: int = 15) -> None:
+    def __init__(self, sources: List[Union[int, str]]) -> None:
         self.sources: List[VideoSource] = []
-        self.max_fps = max_fps
         self.valid_sources = []  # ← Nuevo: lista de fuentes válidas
 
         for i, source in enumerate(sources):
-            self.sources.append(VideoSource(source, max_fps=max_fps, name=f"Source {i}"))
+            self.sources.append(VideoSource(source, name=f"Source {i}"))
 
     def start_cameras(self) -> None:
         success_count = 0
